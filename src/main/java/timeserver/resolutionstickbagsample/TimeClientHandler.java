@@ -1,4 +1,4 @@
-package resolutionstickbagsample;
+package timeserver.resolutionstickbagsample;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

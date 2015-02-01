@@ -1,4 +1,4 @@
-package resolutionstickbagsample;
+package timeserver.timesample;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -9,12 +9,13 @@ import io.netty.channel.ChannelHandlerContext;
  * Created by jianying.wcj on 2015/1/26 0026.
  */
 public class TimeServerHandler extends ChannelHandlerAdapter {
-
-    private int counter;
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        String body = (String)msg;
-        System.out.println("The time server receive order:"+body + "; the counter is : "+ ++counter);
+        ByteBuf buf = (ByteBuf)msg;
+        byte[] req = new byte[buf.readableBytes()];
+        buf.readBytes(req);
+        String body = new String(req,"UTF-8");
+        System.out.println("The time server receive order:"+body);
         String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new java.util.Date(
                 System.currentTimeMillis()).toString() : "BAD ORDER";
         ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());

@@ -1,20 +1,14 @@
-package resolutionstickbagsample;
+package timeserver.timesample;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LineBasedFrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
 
 /**
  * Created by jianying.wcj on 2015/1/26 0026.
  */
-//TODO 这个client貌似还有点问题，还需要再调试下。。。
 public class TimeClient {
     public void connect(int port,String host) throws Exception {
         EventLoopGroup group = new NioEventLoopGroup();
@@ -25,8 +19,6 @@ public class TimeClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(SocketChannel ch) {
-                               ch.pipeline().addLast(new LineBasedFrameDecoder(1024));
-                               ch.pipeline().addLast(new StringDecoder());
                                ch.pipeline().addLast(new TimeClientHandler());
                         }
                     });
