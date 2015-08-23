@@ -31,11 +31,7 @@ public class HeartBeatClientHandler extends ChannelHandlerAdapter{
 
     @Override
     public void channelRead(ChannelHandlerContext ctx,Object msg) throws Exception{
-        ByteBuf buf = (ByteBuf) msg;
-        byte[] req = new byte[buf.readableBytes()];
-        buf.readBytes(req);
-        String body = new String(req,"UTF-8");
-        System.out.println("client receive msg : " + body);
+        System.out.println("client receive msg : " + msg);
         byte[] req1 = "ping".getBytes();
         ByteBuf firstMessage1 = Unpooled.copiedBuffer(req1);
         Thread.sleep(2000);
