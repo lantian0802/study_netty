@@ -1,5 +1,6 @@
 package udp;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
@@ -14,8 +15,11 @@ public class ChineseProverbClientHandler extends SimpleChannelInboundHandler<Dat
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
 
-        String response = new String(msg.content().array(), CharsetUtil.UTF_8);
-        System.out.println(response);
+        ByteBuf buf = msg.content();
+        byte[] req = new byte[buf.readableBytes()];
+        buf.readBytes(req);
+        String body = new String(req,"UTF-8");
+        System.out.println(body);
     }
 
     @Override

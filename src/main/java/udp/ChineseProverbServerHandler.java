@@ -32,11 +32,12 @@ public class ChineseProverbServerHandler extends SimpleChannelInboundHandler<Dat
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
-        String req = new String(msg.content().array(), CharsetUtil.UTF_8);
-        System.out.println(req);
+        ByteBuf buf = msg.content();
+        byte[] req = new byte[buf.readableBytes()];
+        buf.readBytes(req);
+        String body = new String(req,"UTF-8");
+        System.out.println(body);
         ByteBuf res = Unpooled.copiedBuffer("result:" + nextQuote(), CharsetUtil.UTF_8);
-        if(req.equals("q")) {
-            ctx.writeAndFlush(new DatagramPacket(res,msg.sender()));
-        }
+        ctx.writeAndFlush(new DatagramPacket(res,msg.sender()));
     }
 }
