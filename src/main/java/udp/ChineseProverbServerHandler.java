@@ -4,9 +4,9 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.socket.DatagramPacket;
 import io.netty.util.CharsetUtil;
 
-import java.net.DatagramPacket;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -32,11 +32,11 @@ public class ChineseProverbServerHandler extends SimpleChannelInboundHandler<Dat
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, DatagramPacket msg) throws Exception {
-        String req = new String(msg.getData(), CharsetUtil.UTF_8);
+        String req = new String(msg.content().array(), CharsetUtil.UTF_8);
         System.out.println(req);
         ByteBuf res = Unpooled.copiedBuffer("result:" + nextQuote(), CharsetUtil.UTF_8);
         if(req.equals("q")) {
-            ctx.writeAndFlush(new DatagramPacket(res.array(),res.array().length,msg.getSocketAddress()));
+            ctx.writeAndFlush(new DatagramPacket(res,msg.sender()));
         }
     }
 }

@@ -7,10 +7,10 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.CharsetUtil;
 
-import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 
 /**
@@ -27,8 +27,9 @@ public class ChineseProverbClient {
                     .handler(new ChineseProverbClientHandler());
             //选择0这个端口，表示让系统随机选择一个本地端口。
             Channel ch = b.bind(0).sync().channel();
+            ByteBuf content = Unpooled.copiedBuffer("q".getBytes());
             ch.writeAndFlush(
-                    new DatagramPacket("q".getBytes(),"q".length(),new InetSocketAddress("255.255.255.255",port))).sync();
+                    new DatagramPacket(content,new InetSocketAddress("255.255.255.255",port))).sync();
             if(!ch.closeFuture().await(15000)) {
                 System.out.println("查询超时");
             }
